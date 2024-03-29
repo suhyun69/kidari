@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,5 +39,12 @@ public class BackOfficeController {
     ResponseEntity<LectureInfo> getLecture(@PathVariable("lectureNo") Long lectureNo) {
         LectureInfo lectureInfo = getLectureUseCase.getLecture(lectureNo);
         return ResponseEntity.ok(lectureInfo);
+    }
+
+    @GetMapping("/lectures")
+    @Operation(summary = "강연 전체 조회")
+    ResponseEntity<List<LectureInfo>> getLectures() {
+        List<LectureInfo> lectureInfos = getLectureUseCase.getLectures();
+        return ResponseEntity.ok(lectureInfos);
     }
 }

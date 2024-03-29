@@ -12,7 +12,9 @@ import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -35,5 +37,13 @@ public class LecturePersistenceAdapter implements
         LectureJpaEntity lectureT = lectureRepository.findById(lectureNo)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
         return lectureMapper.mapToDomainEntity(lectureT);
+    }
+
+    @Override
+    public List<Lecture> getLectures() {
+        List<LectureJpaEntity> lectureTList = lectureRepository.findAll();
+        return lectureTList.stream()
+                .map(t -> lectureMapper.mapToDomainEntity(t))
+                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.kidari.api.application.service;
 
 import com.kidari.api.adapter.in.web.response.LectureInfo;
+import com.kidari.api.adapter.out.persistence.entity.LectureJpaEntity;
 import com.kidari.api.application.port.in.GetLectureUseCase;
 import com.kidari.api.application.port.in.LectureOpenUseCase;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
@@ -9,6 +10,9 @@ import com.kidari.api.application.port.out.GetLecturePort;
 import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +34,13 @@ public class LectureService implements
     public LectureInfo getLecture(Long lectureNo) {
         Lecture lecture = getLecturePort.getLecture(lectureNo);
         return new LectureInfo(lecture);
+    }
+
+    @Override
+    public List<LectureInfo> getLectures() {
+        List<Lecture> lecture = getLecturePort.getLectures();
+        return lecture.stream()
+                .map(LectureInfo::new)
+                .collect(Collectors.toList());
     }
 }
