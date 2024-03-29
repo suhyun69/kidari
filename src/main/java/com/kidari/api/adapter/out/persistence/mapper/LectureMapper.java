@@ -10,6 +10,7 @@ public class LectureMapper {
 
     public LectureJpaEntity mapToJpaEntity(LectureOpenAppRequest req) {
         return LectureJpaEntity.builder()
+                .title(req.getTitle())
                 .lecturer(req.getLecturer())
                 .location(req.getLocation())
                 .capacity(req.getCapacity())
@@ -21,6 +22,7 @@ public class LectureMapper {
     public Lecture mapToDomainEntity(LectureJpaEntity t) {
         return Lecture.builder()
                 .no(t.getNo())
+                .title(t.getTitle())
                 .lecturer(t.getLecturer())
                 .location(t.getLocation())
                 .capacity(t.getCapacity())

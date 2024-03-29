@@ -18,6 +18,7 @@ public class LectureJpaEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long no;
 
+    private String title;
     private String lecturer;
     private String location;
     private Integer capacity;

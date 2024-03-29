@@ -9,6 +9,7 @@ import lombok.Value;
 @RequiredArgsConstructor
 public class Lecture {
     private Long no;
+    private String title;
     private String lecturer;
     private String location;
     private Integer capacity;

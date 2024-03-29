@@ -6,6 +6,7 @@ import lombok.Getter;
 @Data
 @Getter
 public class LectureOpenWebRequest {
+    private String title;
     private String lecturer;
     private String location;
     private Integer capacity;
