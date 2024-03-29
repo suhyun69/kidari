@@ -23,7 +23,7 @@ public class OpenApiConfig {
         Info info = new Info()
                 .title("Kidari Studio Backend Test")
                 .version("v0.0.1")
-                .description("키다리 스튜디오의 백엔드 테스트 API 명세서입니다.");
+                .description("키다리 스튜디오의 백엔드 테스트 API 명세입니다.");
 
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
