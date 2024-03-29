@@ -1,13 +1,20 @@
 package com.kidari.api.application.port.in.command;
 
 import com.kidari.api.adapter.in.web.request.LectureOpenWebRequest;
+import com.kidari.api.config.exception.SelfValidating;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-public class LectureOpenAppRequest {
+@EqualsAndHashCode(callSuper = false)
+public class LectureOpenAppRequest extends SelfValidating<LectureOpenAppRequest> {
     private String title;
     private String lecturer;
     private String location;
+
+    @Min(value = 1, message = "입장 가능 인원은 1 이상이어야 합니다.")
     private Integer capacity;
     private String startDateTime;
     private String content;
@@ -19,5 +26,7 @@ public class LectureOpenAppRequest {
         this.capacity = req.getCapacity();
         this.startDateTime = req.getStartDateTime();
         this.content = req.getContent();
+
+        this.validateSelf();
     }
 }

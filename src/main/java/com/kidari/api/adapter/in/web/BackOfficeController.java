@@ -7,6 +7,7 @@ import com.kidari.api.application.port.in.LectureOpenUseCase;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class BackOfficeController {
 
     @PostMapping("/lecture")
     @Operation(summary = "강연 등록")
-    ResponseEntity<Long> lectureOpen(@RequestBody LectureOpenWebRequest request) {
+    ResponseEntity<Long> lectureOpen(@Valid @RequestBody LectureOpenWebRequest request) {
 
         LectureOpenAppRequest appReq = new LectureOpenAppRequest(request);
         Long lectureNo = lectureOpenUseCase.lectureOpen(appReq);
