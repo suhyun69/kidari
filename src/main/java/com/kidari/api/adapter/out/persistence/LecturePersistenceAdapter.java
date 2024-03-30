@@ -66,10 +66,14 @@ public class LecturePersistenceAdapter implements
             throw new BusinessException(ErrorCode.LECTURE_NOT_FOUND);
         }
 
-        HistoryJpaEntity historyT = historyMapper.mapToJpaEntity(req);
-        historyRepository.save(historyT);
-
-        return true;
+        try {
+            HistoryJpaEntity historyT = historyMapper.mapToJpaEntity(req);
+            historyRepository.save(historyT);
+            return true;
+        }
+        catch (Exception ex) {
+            return false;
+        }
     }
 
     @Override
@@ -79,9 +83,13 @@ public class LecturePersistenceAdapter implements
             throw new BusinessException(ErrorCode.LECTURE_NOT_FOUND);
         }
 
-        HistoryJpaEntity historyT = historyRepository.findByLectureNoAndEmployeeNo(req.getLectureNo(), req.getEmployeeNo());
-        historyRepository.delete(historyT);
-
-        return true;
+        try {
+            HistoryJpaEntity historyT = historyRepository.findByLectureNoAndEmployeeNo(req.getLectureNo(), req.getEmployeeNo());
+            historyRepository.delete(historyT);
+            return true;
+        }
+        catch (Exception ex) {
+            return false;
+        }
     }
 }
