@@ -23,7 +23,7 @@ public class LectureInfo {
         this.lecturer = l.getLecturer();
         this.location = l.getLocation();
         this.capacity = l.getCapacity();
-        this.startDateTime = l.getStartDateTime();
+        this.startDateTime = String.valueOf(l.getStartDateTime()).replace("T", " ");
         this.content = l.getContent();
     }
 }

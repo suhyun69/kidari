@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import java.time.LocalDateTime;
+
 @Value
 @Builder
 @RequiredArgsConstructor
@@ -13,6 +15,6 @@ public class Lecture {
     private String lecturer;
     private String location;
     private Integer capacity;
-    private String startDateTime;
+    private LocalDateTime startDateTime;
     private String content;
 }

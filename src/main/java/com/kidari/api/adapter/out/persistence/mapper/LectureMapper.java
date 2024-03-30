@@ -5,8 +5,13 @@ import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
 import com.kidari.api.domain.Lecture;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class LectureMapper {
+
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public LectureJpaEntity mapToJpaEntity(LectureOpenAppRequest req) {
         return LectureJpaEntity.builder()

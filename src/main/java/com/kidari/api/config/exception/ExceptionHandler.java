@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.format.DateTimeParseException;
+
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
@@ -43,6 +45,12 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> handleBadRequestException(BadRequestException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HTTP_BAD_REQUEST);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<?> handleDateTimeParseException(DateTimeParseException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(String.format("'%s'을 시간으로 변환할 수 없습니다.", ex.getParsedString()));
         return new ResponseEntity<>(errorResponse, HTTP_BAD_REQUEST);
     }
 

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -22,6 +25,6 @@ public class LectureJpaEntity {
     private String lecturer;
     private String location;
     private Integer capacity;
-    private String startDateTime;
+    private LocalDateTime startDateTime;
     private String content;
 }
