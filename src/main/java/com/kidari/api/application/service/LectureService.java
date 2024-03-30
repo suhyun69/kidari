@@ -6,10 +6,7 @@ import com.kidari.api.application.port.in.*;
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.CancelLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
-import com.kidari.api.application.port.out.AddHistoryPort;
-import com.kidari.api.application.port.out.AddLecturePort;
-import com.kidari.api.application.port.out.DeleteHistoryPort;
-import com.kidari.api.application.port.out.GetLecturePort;
+import com.kidari.api.application.port.out.*;
 import com.kidari.api.config.exception.BusinessException;
 import com.kidari.api.config.exception.ErrorCode;
 import com.kidari.api.domain.History;
@@ -17,6 +14,7 @@ import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +32,7 @@ public class LectureService implements
     private final GetLecturePort getLecturePort;
     private final AddHistoryPort addHistoryPort;
     private final DeleteHistoryPort deleteHistoryPort;
+    private final GetHistoryPort getHistoryPort;
 
     @Override
     public Long lectureOpen(LectureOpenAppRequest req) {
@@ -90,10 +89,16 @@ public class LectureService implements
     @Override
     public List<String> getEmployees(Long lectureNo) {
 
-        Lecture lecture = getLecturePort.getLecture(lectureNo);
+        return getLecturePort.getLecture(lectureNo).getHistory().stream()
+                .map(History::getEmployeeNo)
+                .collect(Collectors.toList());
+    }
 
-        return lecture.getHistory().stream()
-                .map(h -> h.getEmployeeNo())
+    @Override
+    public List<Long> getLectures(String employeeNo) {
+
+        return getHistoryPort.getHistories(employeeNo).stream()
+                .map(History::getLectureNo)
                 .collect(Collectors.toList());
     }
 }

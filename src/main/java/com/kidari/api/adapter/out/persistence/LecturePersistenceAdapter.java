@@ -9,10 +9,7 @@ import com.kidari.api.adapter.out.persistence.repository.LectureRepository;
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.CancelLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
-import com.kidari.api.application.port.out.AddHistoryPort;
-import com.kidari.api.application.port.out.AddLecturePort;
-import com.kidari.api.application.port.out.DeleteHistoryPort;
-import com.kidari.api.application.port.out.GetLecturePort;
+import com.kidari.api.application.port.out.*;
 import com.kidari.api.config.exception.BusinessException;
 import com.kidari.api.config.exception.ErrorCode;
 import com.kidari.api.domain.History;
@@ -20,6 +17,7 @@ import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +29,7 @@ public class LecturePersistenceAdapter implements
         , GetLecturePort
         , AddHistoryPort
         , DeleteHistoryPort
+        , GetHistoryPort
 {
 
     private final LectureRepository lectureRepository;
@@ -80,13 +79,18 @@ public class LecturePersistenceAdapter implements
     public Boolean deleteHistory(Long seq) {
 
         try {
-            HistoryJpaEntity historyT = historyRepository.findById(seq)
-                    .orElseThrow(() -> new BusinessException(ErrorCode.HISTORY_NOT_FOUND));
-            historyRepository.delete(historyT);
+            historyRepository.deleteById(seq);
             return true;
         }
         catch (Exception ex) {
             return false;
         }
+    }
+
+    @Override
+    public List<History> getHistories(String employeeNo) {
+        return historyRepository.findByEmployeeNo(employeeNo).stream()
+                .map(historyMapper::mapToDomainEntity)
+                .collect(Collectors.toList());
     }
 }
