@@ -2,10 +2,7 @@ package com.kidari.api.application.service;
 
 import com.kidari.api.adapter.in.web.response.LectureInfo;
 import com.kidari.api.adapter.out.persistence.entity.LectureJpaEntity;
-import com.kidari.api.application.port.in.ApplyLectureUseCase;
-import com.kidari.api.application.port.in.CancelLectureUseCase;
-import com.kidari.api.application.port.in.GetLectureUseCase;
-import com.kidari.api.application.port.in.LectureOpenUseCase;
+import com.kidari.api.application.port.in.*;
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.CancelLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
@@ -30,6 +27,7 @@ public class LectureService implements
         , GetLectureUseCase
         , ApplyLectureUseCase
         , CancelLectureUseCase
+        , GetEmployeesUseCase
 {
 
     private final AddLecturePort addLecturePort;
@@ -87,5 +85,15 @@ public class LectureService implements
         Boolean result = deleteHistoryPort.deleteHistory(history.getSeq());
 
         return result;
+    }
+
+    @Override
+    public List<String> getEmployees(Long lectureNo) {
+
+        Lecture lecture = getLecturePort.getLecture(lectureNo);
+
+        return lecture.getHistory().stream()
+                .map(h -> h.getEmployeeNo())
+                .collect(Collectors.toList());
     }
 }

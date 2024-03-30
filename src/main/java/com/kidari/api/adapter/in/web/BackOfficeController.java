@@ -2,6 +2,7 @@ package com.kidari.api.adapter.in.web;
 
 import com.kidari.api.adapter.in.web.request.LectureOpenWebRequest;
 import com.kidari.api.adapter.in.web.response.LectureInfo;
+import com.kidari.api.application.port.in.GetEmployeesUseCase;
 import com.kidari.api.application.port.in.GetLectureUseCase;
 import com.kidari.api.application.port.in.LectureOpenUseCase;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
@@ -24,6 +25,7 @@ public class BackOfficeController {
 
     private final LectureOpenUseCase lectureOpenUseCase;
     private final GetLectureUseCase getLectureUseCase;
+    private final GetEmployeesUseCase getEmployeesUseCase;
 
     @PostMapping("/lecture")
     @Operation(summary = "강연 등록", description = "강연자, 강연장, 신청 인원, 강연 시간, 강연 내용 입력")
@@ -48,4 +50,12 @@ public class BackOfficeController {
         List<LectureInfo> lectureInfos = getLectureUseCase.getLectures();
         return ResponseEntity.ok(lectureInfos);
     }
+
+    @GetMapping("/employees/{lectureNo}")
+    @Operation(summary = "강연 신청자 목록", description = "강연 별 신청자 목록")
+    ResponseEntity<List<String>> getEmployees(@PathVariable("lectureNo") Long lectureNo) {
+        List<String> employeeList = getEmployeesUseCase.getEmployees(lectureNo);
+        return ResponseEntity.ok(employeeList);
+    }
+
 }
