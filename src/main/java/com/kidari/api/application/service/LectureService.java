@@ -13,6 +13,9 @@ import com.kidari.api.application.port.out.AddHistoryPort;
 import com.kidari.api.application.port.out.AddLecturePort;
 import com.kidari.api.application.port.out.DeleteHistoryPort;
 import com.kidari.api.application.port.out.GetLecturePort;
+import com.kidari.api.config.exception.BusinessException;
+import com.kidari.api.config.exception.ErrorCode;
+import com.kidari.api.domain.History;
 import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,16 +51,23 @@ public class LectureService implements
 
     @Override
     public List<LectureInfo> getLectures() {
-        List<Lecture> lecture = getLecturePort.getLectures();
-        return lecture.stream()
+        List<Lecture> lectures = getLecturePort.getLectures();
+        return lectures.stream()
                 .map(LectureInfo::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Boolean applyLecture(ApplyLectureAppRequest req) {
+
+        Lecture lecture = getLecturePort.getLecture(req.getLectureNo());
         
-        // 강연 목록 조회
+        // 중복 신청 체크
+        if(lecture.getHistory().stream().anyMatch(h -> h.getEmployeeNo().equals(req.getEmployeeNo()))) {
+            throw new BusinessException(ErrorCode.LECTURE_DUPLICATED);
+        }
+
+        // 수강 인원 체크
 
         Boolean result = addHistoryPort.addHistory(req);
 
@@ -66,10 +76,15 @@ public class LectureService implements
 
     @Override
     public Boolean cancelLecture(CancelLectureAppRequest req) {
-        
-        // 강연 목록 조회
 
-        Boolean result = deleteHistoryPort.deleteHistory(req);
+        Lecture lecture = getLecturePort.getLecture(req.getLectureNo());
+
+        History history = lecture.getHistory().stream()
+                .filter(h -> h.getEmployeeNo().equals(req.getEmployeeNo()))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
+
+        Boolean result = deleteHistoryPort.deleteHistory(history.getSeq());
 
         return result;
     }

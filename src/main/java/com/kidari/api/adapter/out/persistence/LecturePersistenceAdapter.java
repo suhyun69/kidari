@@ -15,6 +15,7 @@ import com.kidari.api.application.port.out.DeleteHistoryPort;
 import com.kidari.api.application.port.out.GetLecturePort;
 import com.kidari.api.config.exception.BusinessException;
 import com.kidari.api.config.exception.ErrorCode;
+import com.kidari.api.domain.History;
 import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -76,14 +77,11 @@ public class LecturePersistenceAdapter implements
     }
 
     @Override
-    public Boolean deleteHistory(CancelLectureAppRequest req) {
-
-        if(!lectureRepository.existsById(req.getLectureNo())) {
-            throw new BusinessException(ErrorCode.LECTURE_NOT_FOUND);
-        }
+    public Boolean deleteHistory(Long seq) {
 
         try {
-            HistoryJpaEntity historyT = historyRepository.findByLectureNoAndEmployeeNo(req.getLectureNo(), req.getEmployeeNo());
+            HistoryJpaEntity historyT = historyRepository.findById(seq)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
             historyRepository.delete(historyT);
             return true;
         }
