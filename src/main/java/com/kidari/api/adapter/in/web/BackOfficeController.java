@@ -26,7 +26,7 @@ public class BackOfficeController {
     private final GetLectureUseCase getLectureUseCase;
 
     @PostMapping("/lecture")
-    @Operation(summary = "강연 등록")
+    @Operation(summary = "강연 등록", description = "강연자, 강연장, 신청 인원, 강연 시간, 강연 내용 입력")
     ResponseEntity<Long> lectureOpen(@Valid @RequestBody LectureOpenWebRequest request) {
 
         LectureOpenAppRequest appReq = new LectureOpenAppRequest(request);
@@ -43,7 +43,7 @@ public class BackOfficeController {
     }
 
     @GetMapping("/lectures")
-    @Operation(summary = "강연 전체 조회")
+    @Operation(summary = "강연 목록", description = "전체 강연 목록")
     ResponseEntity<List<LectureInfo>> getLectures() {
         List<LectureInfo> lectureInfos = getLectureUseCase.getLectures();
         return ResponseEntity.ok(lectureInfos);

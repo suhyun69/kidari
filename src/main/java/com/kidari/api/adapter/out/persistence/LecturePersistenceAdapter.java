@@ -7,9 +7,11 @@ import com.kidari.api.adapter.out.persistence.mapper.LectureMapper;
 import com.kidari.api.adapter.out.persistence.repository.HistoryRepository;
 import com.kidari.api.adapter.out.persistence.repository.LectureRepository;
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
+import com.kidari.api.application.port.in.command.CancelLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
 import com.kidari.api.application.port.out.AddHistoryPort;
 import com.kidari.api.application.port.out.AddLecturePort;
+import com.kidari.api.application.port.out.DeleteHistoryPort;
 import com.kidari.api.application.port.out.GetLecturePort;
 import com.kidari.api.config.exception.BusinessException;
 import com.kidari.api.config.exception.ErrorCode;
@@ -27,6 +29,7 @@ public class LecturePersistenceAdapter implements
         AddLecturePort
         , GetLecturePort
         , AddHistoryPort
+        , DeleteHistoryPort
 {
 
     private final LectureRepository lectureRepository;
@@ -65,6 +68,19 @@ public class LecturePersistenceAdapter implements
 
         HistoryJpaEntity historyT = historyMapper.mapToJpaEntity(req);
         historyRepository.save(historyT);
+
+        return true;
+    }
+
+    @Override
+    public Boolean deleteHistory(CancelLectureAppRequest req) {
+
+        if(!lectureRepository.existsById(req.getLectureNo())) {
+            throw new BusinessException(ErrorCode.LECTURE_NOT_FOUND);
+        }
+
+        HistoryJpaEntity historyT = historyRepository.findByLectureNoAndEmployeeNo(req.getLectureNo(), req.getEmployeeNo());
+        historyRepository.delete(historyT);
 
         return true;
     }
