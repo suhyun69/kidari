@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Builder
@@ -19,6 +21,7 @@ public class LectureJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "LECTURE_NO")
     private Long no;
 
     private String title;
@@ -27,4 +30,7 @@ public class LectureJpaEntity {
     private Integer capacity;
     private LocalDateTime startDateTime;
     private String content;
+
+    @OneToMany(mappedBy = "lecture")
+    private List<HistoryJpaEntity> history = new ArrayList<>();
 }

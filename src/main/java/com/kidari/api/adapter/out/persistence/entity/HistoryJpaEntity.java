@@ -18,6 +18,8 @@ public class HistoryJpaEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long seq;
 
-    private Long lectureNo;
+    @ManyToOne
+    @JoinColumn(name = "LECTURE_NO")
+    private LectureJpaEntity lecture;
     private String employeeNo;
 }

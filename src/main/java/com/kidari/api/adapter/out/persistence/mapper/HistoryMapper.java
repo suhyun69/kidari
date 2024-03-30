@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class HistoryMapper {
 
-    public HistoryJpaEntity mapToJpaEntity(ApplyLectureAppRequest req) {
+    public HistoryJpaEntity mapToJpaEntity(LectureJpaEntity lectureT, String employeeNo) {
         return HistoryJpaEntity.builder()
-                .lectureNo(req.getLectureNo())
-                .employeeNo(req.getEmployeeNo())
+                .lecture(lectureT)
+                .employeeNo(employeeNo)
                 .build();
     }
 
     public History mapToDomainEntity(HistoryJpaEntity t) {
         return History.builder()
                 .seq(t.getSeq())
-                .lectureNo(t.getLectureNo())
+                .lectureNo(t.getLecture().getNo())
                 .employeeNo(t.getEmployeeNo())
                 .build();
     }

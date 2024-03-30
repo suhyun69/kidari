@@ -62,12 +62,11 @@ public class LecturePersistenceAdapter implements
     @Override
     public Boolean addHistory(ApplyLectureAppRequest req) {
 
-        if(!lectureRepository.existsById(req.getLectureNo())) {
-            throw new BusinessException(ErrorCode.LECTURE_NOT_FOUND);
-        }
+        LectureJpaEntity lectureT = lectureRepository.findById(req.getLectureNo())
+                .orElseThrow(() -> new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
 
         try {
-            HistoryJpaEntity historyT = historyMapper.mapToJpaEntity(req);
+            HistoryJpaEntity historyT = historyMapper.mapToJpaEntity(lectureT, req.getEmployeeNo());
             historyRepository.save(historyT);
             return true;
         }

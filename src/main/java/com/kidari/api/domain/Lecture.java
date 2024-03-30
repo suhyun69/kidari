@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Value
 @Builder
@@ -17,4 +18,5 @@ public class Lecture {
     private Integer capacity;
     private LocalDateTime startDateTime;
     private String content;
+    private List<History> history;
 }
