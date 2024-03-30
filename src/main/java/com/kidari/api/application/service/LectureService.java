@@ -82,7 +82,7 @@ public class LectureService implements
         History history = lecture.getHistory().stream()
                 .filter(h -> h.getEmployeeNo().equals(req.getEmployeeNo()))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.HISTORY_NOT_FOUND));
 
         Boolean result = deleteHistoryPort.deleteHistory(history.getSeq());
 

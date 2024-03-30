@@ -81,7 +81,7 @@ public class LecturePersistenceAdapter implements
 
         try {
             HistoryJpaEntity historyT = historyRepository.findById(seq)
-                    .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.HISTORY_NOT_FOUND));
             historyRepository.delete(historyT);
             return true;
         }
