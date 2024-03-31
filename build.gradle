@@ -29,7 +29,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
     testImplementation 'org.projectlombok:lombok:1.18.28'
-    testImplementation 'junit:junit:4.13.1'
+    // testImplementation 'junit:junit:4.13.1'
 
     compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -10,6 +10,7 @@ import com.kidari.api.config.exception.BusinessException;
 import com.kidari.api.config.exception.ErrorCode;
 import com.kidari.api.domain.History;
 import com.kidari.api.domain.Lecture;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +84,7 @@ public class LectureService implements
     }
 
     @Override
+    @Transactional
     public List<String> getEmployees(Long lectureNo) {
 
         return getLecturePort.getLecture(lectureNo).getHistory().stream()
