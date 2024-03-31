@@ -1,7 +1,6 @@
 package com.kidari.api.application.service;
 
 import com.kidari.api.adapter.in.web.response.LectureInfo;
-import com.kidari.api.adapter.out.persistence.entity.LectureJpaEntity;
 import com.kidari.api.application.port.in.*;
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.CancelLectureAppRequest;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -3,10 +3,14 @@ package com.kidari.api.application.port.in.command;
 import com.kidari.api.adapter.in.web.request.ApplyLectureWebRequest;
 import com.kidari.api.config.exception.SelfValidating;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
+@Builder // test
+@AllArgsConstructor // test
 @EqualsAndHashCode(callSuper = false)
 public class ApplyLectureAppRequest extends SelfValidating<ApplyLectureAppRequest> {
     private Long lectureNo;
