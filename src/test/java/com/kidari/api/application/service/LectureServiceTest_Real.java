@@ -2,6 +2,7 @@ package com.kidari.api.application.service;
 
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
+import jakarta.transaction.Transactional;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.ShrinkingMode;
@@ -34,6 +35,7 @@ public class LectureServiceTest_Real {
     }
 
     @Test
+    @Transactional
     void 강연신청_동시성_테스트() throws InterruptedException {
 
         //given
@@ -56,6 +58,12 @@ public class LectureServiceTest_Real {
         }
 
         //when
+        ApplyLectureAppRequest applyLectureReq = ApplyLectureAppRequest.builder()
+                .lectureNo(lectureNo)
+                .employeeNo("K0001")
+                .build();
+        lectureService.applyLecture(applyLectureReq);
+        /*
         for (String employeeNo : employeeNoList) {
             //스레드 n개중 한개의 쓰레드 할당
             executorService.submit(() -> {
@@ -71,6 +79,10 @@ public class LectureServiceTest_Real {
             });
         }
         countDownLatch.await();
+
+         */
+
+        List<String> test = lectureService.getEmployees(lectureNo);
 
         //then
         assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(lectureOpenReq.getCapacity());

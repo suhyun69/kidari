@@ -84,7 +84,6 @@ public class LectureService implements
     }
 
     @Override
-    @Transactional
     public List<String> getEmployees(Long lectureNo) {
 
         return getLecturePort.getLecture(lectureNo).getHistory().stream()
