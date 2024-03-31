@@ -8,6 +8,8 @@ import com.kidari.api.domain.History;
 import com.kidari.api.domain.Lecture;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class HistoryMapper {
 
@@ -15,6 +17,7 @@ public class HistoryMapper {
         return HistoryJpaEntity.builder()
                 .lecture(lectureT)
                 .employeeNo(employeeNo)
+                .insDate(LocalDateTime.now())
                 .build();
     }
 
@@ -23,6 +26,7 @@ public class HistoryMapper {
                 .seq(t.getSeq())
                 .lectureNo(t.getLecture().getNo())
                 .employeeNo(t.getEmployeeNo())
+                .insDate(t.getInsDate())
                 .build();
     }
 }

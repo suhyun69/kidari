@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -22,4 +24,5 @@ public class HistoryJpaEntity {
     @JoinColumn(name = "LECTURE_NO")
     private LectureJpaEntity lecture;
     private String employeeNo;
+    private LocalDateTime insDate;
 }
