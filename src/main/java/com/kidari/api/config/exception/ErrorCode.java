@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
     LECTURE_NOT_FOUND(404, "강연을 찾을 수 없습니다."),
     LECTURE_DUPLICATED(409, "이미 신청한 강연입니다."),
-    HISTORY_NOT_FOUND(404, "신청 내역이 없습니다.")
+    HISTORY_NOT_FOUND(404, "신청 내역이 없습니다."),
+    CAPACITY_FULLED(423, "신청 인원이 가득 찼습니다.")
 
     ; // End
 

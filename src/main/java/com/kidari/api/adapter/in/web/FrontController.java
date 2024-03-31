@@ -30,6 +30,13 @@ public class FrontController {
     private final CancelLectureUseCase cancelLectureUseCase;
     private final GetLectureUseCase getLectureUseCase;
 
+    @GetMapping("/lectures")
+    @Operation(summary = "강연 목록", description = "전체 강연 목록")
+    ResponseEntity<List<Long>> getAvailableLectures() {
+        List<Long> lectureList = getLectureUseCase.getAvailableLectures();
+        return ResponseEntity.ok(lectureList);
+    }
+
     @PostMapping("/apply")
     @Operation(summary = "강연 신청", description = "사번 입력, 같은 강연 중복 신청 제한")
     ResponseEntity<String> applyLecture(@Valid @RequestBody ApplyLectureWebRequest request) {
@@ -39,6 +46,13 @@ public class FrontController {
         String message = result ? "강연 신청이 완료되었습니다." : "강연 신청에 실패했습니다.";
 
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/lectures/{employeeNo}")
+    @Operation(summary = "신청 내역 조회", description = "사번 입력")
+    ResponseEntity<List<Long>> getLectures(@PathVariable("employeeNo") String employeeNo) {
+        List<Long> lectureList = getLectureUseCase.getLectures(employeeNo);
+        return ResponseEntity.ok(lectureList);
     }
 
     @DeleteMapping("/cancel")
@@ -52,17 +66,6 @@ public class FrontController {
         return ResponseEntity.ok(message);
     }
 
-    @GetMapping("/lectures/{employeeNo}")
-    @Operation(summary = "신청 내역 조회", description = "사번 입력")
-    ResponseEntity<List<Long>> getLectures(@PathVariable("employeeNo") String employeeNo) {
-        List<Long> lectureList = getLectureUseCase.getLectures(employeeNo);
-        return ResponseEntity.ok(lectureList);
-    }
-    
-    @GetMapping("/lectures")
-    @Operation(summary = "강연 목록", description = "전체 강연 목록")
-    ResponseEntity<List<Long>> getAvailableLectures() {
-        List<Long> lectureList = getLectureUseCase.getAvailableLectures();
-        return ResponseEntity.ok(lectureList);
-    }
+    // 실시간 인기 강연
+
 }

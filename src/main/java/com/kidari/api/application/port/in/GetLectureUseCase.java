@@ -5,7 +5,6 @@ import com.kidari.api.adapter.in.web.response.LectureInfo;
 import java.util.List;
 
 public interface GetLectureUseCase {
-    LectureInfo getLecture(Long lectureNo);
     List<LectureInfo> getLectures();
     List<Long> getLectures(String employeeNo);
     List<Long> getAvailableLectures();

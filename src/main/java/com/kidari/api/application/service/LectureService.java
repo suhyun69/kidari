@@ -42,12 +42,6 @@ public class LectureService implements
     }
 
     @Override
-    public LectureInfo getLecture(Long lectureNo) {
-        Lecture lecture = getLecturePort.getLecture(lectureNo);
-        return new LectureInfo(lecture);
-    }
-
-    @Override
     public List<LectureInfo> getLectures() {
         List<Lecture> lectures = getLecturePort.getLectures();
         return lectures.stream()
@@ -66,6 +60,9 @@ public class LectureService implements
         }
 
         // 수강 인원 체크
+        if(lecture.getHistory().size() >= lecture.getCapacity()) {
+            throw new BusinessException(ErrorCode.CAPACITY_FULLED);
+        }
 
         Boolean result = addHistoryPort.addHistory(req);
 
@@ -113,7 +110,6 @@ public class LectureService implements
     }
 
     public Boolean isAvailable(LocalDateTime startDateTime, LocalDateTime now) {
-        // Boolean result = now.isAfter(startDateTime.minusDays(7)) && now.isBefore(startDateTime.plusDays(1));
         Boolean result = now.compareTo(startDateTime.minusDays(7)) >= 0 && startDateTime.plusDays(1).compareTo(now) >= 0;
         return result;
     }
