@@ -58,4 +58,11 @@ public class FrontController {
         List<Long> lectureList = getLectureUseCase.getLectures(employeeNo);
         return ResponseEntity.ok(lectureList);
     }
+    
+    @GetMapping("/lectures")
+    @Operation(summary = "강연 목록", description = "전체 강연 목록")
+    ResponseEntity<List<Long>> getAvailableLectures() {
+        List<Long> lectureList = getLectureUseCase.getAvailableLectures();
+        return ResponseEntity.ok(lectureList);
+    }
 }

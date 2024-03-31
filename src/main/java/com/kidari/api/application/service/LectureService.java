@@ -14,6 +14,7 @@ import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,4 +102,20 @@ public class LectureService implements
                 .map(History::getLectureNo)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Long> getAvailableLectures() {
+
+        return getLecturePort.getLectures().stream()
+                .filter(h -> isAvailable(h.getStartDateTime(), LocalDateTime.now()))
+                .map(Lecture::getNo)
+                .collect(Collectors.toList());
+    }
+
+    public Boolean isAvailable(LocalDateTime startDateTime, LocalDateTime now) {
+        // Boolean result = now.isAfter(startDateTime.minusDays(7)) && now.isBefore(startDateTime.plusDays(1));
+        Boolean result = now.compareTo(startDateTime.minusDays(7)) >= 0 && startDateTime.plusDays(1).compareTo(now) >= 0;
+        return result;
+    }
 }
+
