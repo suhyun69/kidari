@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface GetHistoryPort {
     List<History> getHistories(String employeeNo);
+
+   List<History> getHistoriesAfter3DaysBefore();
 }

@@ -67,5 +67,11 @@ public class FrontController {
     }
 
     // 실시간 인기 강연
+    @GetMapping("/popular")
+    @Operation(summary = "실시간 인기 강연", description = "사번 입력")
+    ResponseEntity<List<Long>> getPopularLectures() {
+        List<Long> lectureList = getLectureUseCase.getPopularLectures();
+        return ResponseEntity.ok(lectureList);
+    }
 
 }

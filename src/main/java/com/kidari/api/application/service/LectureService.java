@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -111,6 +111,19 @@ public class LectureService implements
     public Boolean isAvailable(LocalDateTime startDateTime, LocalDateTime now) {
         Boolean result = now.compareTo(startDateTime.minusDays(7)) >= 0 && startDateTime.plusDays(1).compareTo(now) >= 0;
         return result;
+    }
+
+    @Override
+    public List<Long> getPopularLectures() {
+        List<History> historyList = getHistoryPort.getHistoriesAfter3DaysBefore();
+
+        Map<Long, Long> counted = historyList.stream()
+                .collect(Collectors.groupingBy(x -> x.getLectureNo(), Collectors.counting()));
+
+        List<Long> keySet = new ArrayList<>(counted.keySet());
+        keySet.sort((o1, o2) -> counted.get(o2).compareTo(counted.get(o1)));
+
+        return keySet.stream().limit(3).collect(Collectors.toList());
     }
 }
 

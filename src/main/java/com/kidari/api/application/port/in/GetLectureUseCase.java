@@ -8,4 +8,5 @@ public interface GetLectureUseCase {
     List<LectureInfo> getLectures();
     List<Long> getLectures(String employeeNo);
     List<Long> getAvailableLectures();
+    List<Long> getPopularLectures();
 }

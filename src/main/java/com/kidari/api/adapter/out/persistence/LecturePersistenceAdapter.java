@@ -17,6 +17,7 @@ import com.kidari.api.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +92,14 @@ public class LecturePersistenceAdapter implements
     @Override
     public List<History> getHistories(String employeeNo) {
         return historyRepository.findByEmployeeNo(employeeNo).stream()
+                .map(historyMapper::mapToDomainEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<History> getHistoriesAfter3DaysBefore() {
+        return historyRepository.findAllByInsDateAfter(LocalDateTime.now().minusDays(3))
+                .stream()
                 .map(historyMapper::mapToDomainEntity)
                 .collect(Collectors.toList());
     }
