@@ -36,7 +36,7 @@ public class LectureService implements
     private final GetHistoryPort getHistoryPort;
 
     @Override
-    public synchronized Long lectureOpen(LectureOpenAppRequest req) {
+    public Long lectureOpen(LectureOpenAppRequest req) {
         Long lectureNo = addLecturePort.lectureOpen(req);
         return lectureNo;
     }
