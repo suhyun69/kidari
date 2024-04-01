@@ -33,7 +33,7 @@ public class LectureServiceTest_Mock {
     private final LectureService lectureService = new LectureService(addLecturePort, getLecturePort, addHistoryPort, deleteHistoryPort, getHistoryPort);
 
     @Property(shrinking = ShrinkingMode.FULL)
-    void isAvailable(@ForAll @Size(value = 100) List<@IntRange(min = -10, max=10) Integer> diffs) {
+    void 강연신청목록__강연_시작_시간_기준_노출_범위_테스트(@ForAll @Size(value = 100) List<@IntRange(min = -10, max=10) Integer> diffs) {
 
         for(Integer diff : diffs) {
             LocalDateTime now = LocalDateTime.now();
@@ -52,7 +52,7 @@ public class LectureServiceTest_Mock {
     }
 
     @Property
-    void getPopularLectures(@ForAll @Size(value = 5) @UniqueElements List<@IntRange(min = 1, max=10) Integer> sample) {
+    void 실시간_인기_강연__신청_목록에_대해_최빈값_3개_조회(@ForAll @Size(value = 5) @UniqueElements List<@IntRange(min = 1, max=10) Integer> sample) {
 
         // given
         List<History> testCases = new ArrayList<>();
