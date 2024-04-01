@@ -2,18 +2,7 @@ package com.kidari.api.application.service;
 
 import com.kidari.api.application.port.in.command.ApplyLectureAppRequest;
 import com.kidari.api.application.port.in.command.LectureOpenAppRequest;
-import jakarta.transaction.Transactional;
-import net.jqwik.api.ForAll;
-import net.jqwik.api.Property;
-import net.jqwik.api.ShrinkingMode;
-import net.jqwik.api.constraints.AlphaChars;
-import net.jqwik.api.constraints.IntRange;
-import net.jqwik.api.constraints.Size;
-import net.jqwik.api.constraints.StringLength;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -31,6 +20,9 @@ public class LectureServiceTest_Real {
 
     private LectureService lectureService;
 
+    private static Integer NUMBER_OF_THREAD  = 100;
+    private static Integer TEST_CAPACITY = 25;
+
     @Autowired
     public LectureServiceTest_Real(LectureService lectureService) {
         this.lectureService = lectureService;
@@ -40,21 +32,21 @@ public class LectureServiceTest_Real {
     void 강연신청_동시성_테스트() throws InterruptedException {
 
         //given
-        ExecutorService executorService = Executors.newFixedThreadPool(100); // 스레드풀에 스레드 100개 준비
-        CountDownLatch countDownLatch = new CountDownLatch(100);
+        ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREAD); // 스레드풀에 스레드 100개 준비
+        CountDownLatch countDownLatch = new CountDownLatch(NUMBER_OF_THREAD);
 
         LectureOpenAppRequest lectureOpenReq = LectureOpenAppRequest.builder()
                 .title("test")
                 .lecturer("test")
                 .location("test")
-                .capacity(25)
+                .capacity(TEST_CAPACITY)
                 .startDateTime(LocalDateTime.now())
                 .content("test")
                 .build();
         Long lectureNo = lectureService.lectureOpen(lectureOpenReq);
 
         List<ApplyLectureAppRequest> reqList = new ArrayList<>();
-        for(int i=1; i<=100; i++) {
+        for(int i=1; i<=NUMBER_OF_THREAD; i++) {
             reqList.add(new ApplyLectureAppRequest(lectureNo, String.format("K%04d", i)));
         }
 
@@ -66,9 +58,7 @@ public class LectureServiceTest_Real {
         }
         countDownLatch.await();
 
-        List<String> test = lectureService.getEmployees(lectureNo);
-
         //then
-        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(lectureOpenReq.getCapacity());
+        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(TEST_CAPACITY);
     }
 }
