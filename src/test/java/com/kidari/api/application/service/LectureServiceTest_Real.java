@@ -10,6 +10,8 @@ import net.jqwik.api.constraints.AlphaChars;
 import net.jqwik.api.constraints.IntRange;
 import net.jqwik.api.constraints.Size;
 import net.jqwik.api.constraints.StringLength;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,57 +37,39 @@ public class LectureServiceTest_Real {
     }
 
     @Test
-    @Transactional
     void 강연신청_동시성_테스트() throws InterruptedException {
 
         //given
-        ExecutorService executorService = Executors.newFixedThreadPool(100); // 스레드풀에 스레드 100개 준비
-        CountDownLatch countDownLatch = new CountDownLatch(100);
+        ExecutorService executorService = Executors.newFixedThreadPool(2); // 스레드풀에 스레드 100개 준비
+        CountDownLatch countDownLatch = new CountDownLatch(2);
 
         LectureOpenAppRequest lectureOpenReq = LectureOpenAppRequest.builder()
                 .title("test")
                 .lecturer("test")
                 .location("test")
-                .capacity(25)
+                .capacity(1)
                 .startDateTime(LocalDateTime.now())
                 .content("test")
                 .build();
         Long lectureNo = lectureService.lectureOpen(lectureOpenReq);
 
-        List<String> employeeNoList = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            employeeNoList.add(String.format("K%05d", i));
-        }
+        ApplyLectureAppRequest req1 = new ApplyLectureAppRequest(lectureNo, "K0001");
+        ApplyLectureAppRequest req2 = new ApplyLectureAppRequest(lectureNo, "K0002");
 
-        //when
-        ApplyLectureAppRequest applyLectureReq = ApplyLectureAppRequest.builder()
-                .lectureNo(lectureNo)
-                .employeeNo("K0001")
-                .build();
-        lectureService.applyLecture(applyLectureReq);
-        /*
-        for (String employeeNo : employeeNoList) {
-            //스레드 n개중 한개의 쓰레드 할당
-            executorService.submit(() -> {
-                try {
-                    ApplyLectureAppRequest applyLectureReq = ApplyLectureAppRequest.builder()
-                            .lectureNo(lectureNo)
-                            .employeeNo(employeeNo)
-                            .build();
-                    lectureService.applyLecture(applyLectureReq);
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-        }
+        executorService.execute(() -> {
+            lectureService.applyLecture(req1);
+            countDownLatch.countDown();
+        });
+        executorService.execute(() -> {
+            lectureService.applyLecture(req2);
+            countDownLatch.countDown();
+        });
         countDownLatch.await();
-
-         */
 
         List<String> test = lectureService.getEmployees(lectureNo);
 
         //then
-        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(lectureOpenReq.getCapacity());
+        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(1);
     }
 
     @Test

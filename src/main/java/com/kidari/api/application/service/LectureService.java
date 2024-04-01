@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LectureService implements
         LectureOpenUseCase
         , GetLectureUseCase
@@ -35,7 +36,7 @@ public class LectureService implements
     private final GetHistoryPort getHistoryPort;
 
     @Override
-    public Long lectureOpen(LectureOpenAppRequest req) {
+    public synchronized Long lectureOpen(LectureOpenAppRequest req) {
         Long lectureNo = addLecturePort.lectureOpen(req);
         return lectureNo;
     }
