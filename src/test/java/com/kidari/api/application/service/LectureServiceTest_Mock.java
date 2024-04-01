@@ -9,19 +9,16 @@ import net.jqwik.api.ShrinkingMode;
 import net.jqwik.api.constraints.IntRange;
 import net.jqwik.api.constraints.Size;
 import net.jqwik.api.constraints.UniqueElements;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @Slf4j
