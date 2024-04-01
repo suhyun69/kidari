@@ -47,7 +47,7 @@ public class LecturePersistenceAdapter implements
 
     @Override
     public Lecture getLecture(Long lectureNo) {
-        LectureJpaEntity lectureT = lectureRepository.findById(lectureNo)
+        LectureJpaEntity lectureT = lectureRepository.findByNo(lectureNo)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
         return lectureMapper.mapToDomainEntity(lectureT);
     }

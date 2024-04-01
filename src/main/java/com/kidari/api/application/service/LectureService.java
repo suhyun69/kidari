@@ -61,7 +61,8 @@ public class LectureService implements
 
         // 수강 인원 체크
         if(lecture.getHistory().size() >= lecture.getCapacity()) {
-            throw new BusinessException(ErrorCode.CAPACITY_FULLED);
+            // throw new BusinessException(ErrorCode.CAPACITY_FULLED);
+            return false;
         }
 
         Boolean result = addHistoryPort.addHistory(req);
