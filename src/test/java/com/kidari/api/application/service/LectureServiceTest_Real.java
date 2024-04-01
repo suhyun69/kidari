@@ -40,21 +40,21 @@ public class LectureServiceTest_Real {
     void 강연신청_동시성_테스트() throws InterruptedException {
 
         //given
-        ExecutorService executorService = Executors.newFixedThreadPool(10); // 스레드풀에 스레드 100개 준비
-        CountDownLatch countDownLatch = new CountDownLatch(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(100); // 스레드풀에 스레드 100개 준비
+        CountDownLatch countDownLatch = new CountDownLatch(100);
 
         LectureOpenAppRequest lectureOpenReq = LectureOpenAppRequest.builder()
                 .title("test")
                 .lecturer("test")
                 .location("test")
-                .capacity(5)
+                .capacity(25)
                 .startDateTime(LocalDateTime.now())
                 .content("test")
                 .build();
         Long lectureNo = lectureService.lectureOpen(lectureOpenReq);
 
         List<ApplyLectureAppRequest> reqList = new ArrayList<>();
-        for(int i=1; i<=10; i++) {
+        for(int i=1; i<=100; i++) {
             reqList.add(new ApplyLectureAppRequest(lectureNo, String.format("K%04d", i)));
         }
 
@@ -71,45 +71,4 @@ public class LectureServiceTest_Real {
         //then
         assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(lectureOpenReq.getCapacity());
     }
-
-    @Test
-    // @Property
-    // @DisplayName("수강신청 테스트")
-    void 수강신청_테스트(List<String> employeeNoList) throws InterruptedException {
-
-        //given
-        ExecutorService executorService = Executors.newFixedThreadPool(100); // 스레드풀에 스레드 100개 준비
-        CountDownLatch countDownLatch = new CountDownLatch(100);
-
-        LectureOpenAppRequest lectureOpenReq = LectureOpenAppRequest.builder()
-                .title("test")
-                .lecturer("test")
-                .location("test")
-                .capacity(25)
-                .startDateTime(LocalDateTime.now())
-                .content("test")
-                .build();
-        Long lectureNo = lectureService.lectureOpen(lectureOpenReq);
-
-        //when
-        for (String employeeNo : employeeNoList) {
-            //스레드 n개중 한개의 쓰레드 할당
-            executorService.submit(() -> {
-                try {
-                    ApplyLectureAppRequest applyLectureReq = ApplyLectureAppRequest.builder()
-                            .lectureNo(lectureNo)
-                            .employeeNo(employeeNo)
-                            .build();
-                    lectureService.applyLecture(applyLectureReq);
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-        }
-        countDownLatch.await();
-
-        //then
-        assertThat(lectureService.getEmployees(lectureNo)).isEqualTo(lectureOpenReq.getCapacity());
-    }
-
 }
