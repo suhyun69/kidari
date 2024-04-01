@@ -40,36 +40,36 @@ public class LectureServiceTest_Real {
     void 강연신청_동시성_테스트() throws InterruptedException {
 
         //given
-        ExecutorService executorService = Executors.newFixedThreadPool(2); // 스레드풀에 스레드 100개 준비
-        CountDownLatch countDownLatch = new CountDownLatch(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(10); // 스레드풀에 스레드 100개 준비
+        CountDownLatch countDownLatch = new CountDownLatch(10);
 
         LectureOpenAppRequest lectureOpenReq = LectureOpenAppRequest.builder()
                 .title("test")
                 .lecturer("test")
                 .location("test")
-                .capacity(1)
+                .capacity(5)
                 .startDateTime(LocalDateTime.now())
                 .content("test")
                 .build();
         Long lectureNo = lectureService.lectureOpen(lectureOpenReq);
 
-        ApplyLectureAppRequest req1 = new ApplyLectureAppRequest(lectureNo, "K0001");
-        ApplyLectureAppRequest req2 = new ApplyLectureAppRequest(lectureNo, "K0002");
+        List<ApplyLectureAppRequest> reqList = new ArrayList<>();
+        for(int i=1; i<=10; i++) {
+            reqList.add(new ApplyLectureAppRequest(lectureNo, String.format("K%04d", i)));
+        }
 
-        executorService.execute(() -> {
-            lectureService.applyLecture(req1);
-            countDownLatch.countDown();
-        });
-        executorService.execute(() -> {
-            lectureService.applyLecture(req2);
-            countDownLatch.countDown();
-        });
+        for(ApplyLectureAppRequest req : reqList) {
+            executorService.execute(() -> {
+                lectureService.applyLecture(req);
+                countDownLatch.countDown();
+            });
+        }
         countDownLatch.await();
 
         List<String> test = lectureService.getEmployees(lectureNo);
 
         //then
-        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(1);
+        assertThat(lectureService.getEmployees(lectureNo).size()).isEqualTo(lectureOpenReq.getCapacity());
     }
 
     @Test
