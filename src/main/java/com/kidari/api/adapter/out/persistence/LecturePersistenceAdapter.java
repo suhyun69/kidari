@@ -41,7 +41,7 @@ public class LecturePersistenceAdapter implements
     @Override
     public Long lectureOpen(LectureOpenAppRequest req) {
         LectureJpaEntity lectureT = lectureRepository.save(lectureMapper.mapToJpaEntity(req));
-        lectureRepository.saveAndFlush(lectureT);
+        // lectureRepository.saveAndFlush(lectureT);
         return lectureT.getNo();
     }
 
